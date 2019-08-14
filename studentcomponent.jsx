@@ -51,6 +51,14 @@ class StudentComponent extends Component {
         // 3. setState for Students using tempa array
         this.setState({'Students':temp});
     }
+    getSelectedRow(std){
+        this.setState({ 'StudentId': std.StudentId });
+        this.setState({ 'StudentName': std.StudentName });
+        this.setState({ 'Address': std.Address });
+        this.setState({ 'Class': std.Class });
+        this.setState({ 'Division': std.Division });
+    }
+    
     render() {
         return (
             <div className="container">
@@ -93,6 +101,13 @@ class StudentComponent extends Component {
                     <input type="button" value="Save" className="btn btn-success" onClick={this.save.bind(this)} />
                 </div>
                 <br />
+                Select Search Criteria
+                <br/>
+                <input type='radio' name='r' /> Student Name
+                <input type='radio' name='r' /> Class
+                <input type='radio' name='r'  /> Division
+                <input type='text' className="form-control"/> 
+                <br/>
                 <table className="table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -106,7 +121,8 @@ class StudentComponent extends Component {
                     <tbody>
                     {
                         this.state.Students.map((v,i)=> (
-                            <TableRowComponent key={i} std={v}/>
+                            <TableRowComponent key={i} std={v}
+                            selectedRow={this.getSelectedRow.bind(this)}/>
                         ))
                     }
                     </tbody>
@@ -124,9 +140,13 @@ class OptionsComponent extends Component {
 }
 
 class TableRowComponent extends Component {
+    onRowClick(){
+        // the ref. method to be defined by parent
+        this.props.selectedRow(this.props.std);
+    }
     render(){
         return (
-            <tr>
+            <tr onClick={this.onRowClick.bind(this)}>
                 <td>{this.props.std.StudentId}</td>
                 <td>{this.props.std.StudentName}</td>
                 <td>{this.props.std.Address}</td>
